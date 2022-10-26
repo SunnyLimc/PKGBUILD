@@ -36,14 +36,18 @@ package_ttf-windows() {
   [[ -z ${#fonts[@]} ]] && return 0
   provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
   conflicts+=(ttf-tahoma ttf-ms-fonts)
-  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
+  for i in ${fonts[@]}; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-firacode() {
   mkdir -p "$pkgname"
   unzip -q 'FiraCode.zip' -d "$pkgname"
   local fonts=$(ls $pkgname/ttf/*)
-  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
+  for i in ${fonts[@]}; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-firacode-nf() {
@@ -51,18 +55,24 @@ package_ttf-firacode-nf() {
   unzip -q 'FiraCodeNF.zip' -d "$pkgname"
   local fonts=$(ls ${pkgname}/*Complete.ttf)
   fonts+=$(ls $pkgname/*Mono.ttf)
-  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
+  for i in ${fonts[@]}; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
 }
 
 package_ttf-lxgw-wenkai-screen() {
   mkdir -p "$pkgname"
   local fonts=('LXGWWenKaiScreen.ttf', 'LXGWWenKaiScreenR.ttf')
-  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
+  for i in ${fonts[@]}; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-lxgw-cleargothic-book() {
   mkdir -p "$pkgname"
   local fonts=('LXGWNewClearGothic-Book.ttf')
-  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
+  for i in ${fonts[@]}; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
