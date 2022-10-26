@@ -1,1 +1,5 @@
-**/windows_fonts*
+**/src/**
+**/pkg/**
+**/srcpkg/**
+**/*.zst
+**/*.sig
