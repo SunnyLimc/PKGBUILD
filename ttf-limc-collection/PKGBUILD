@@ -31,48 +31,41 @@ package_ttf-windows() {
   [[ ! -f "windows_fonts.zip" ]] && return 0
   mkdir -p "$pkgname"
   unzip -q 'windows_fonts.zip' -d "$pkgname"
-  local fonts=$(ls windows_fonts/*.ttf)
-  fonts+=$(ls $pkgname/*.ttc)
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
   [[ -z ${#fonts[@]} ]] && return 0
   provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
   conflicts+=(ttf-tahoma ttf-ms-fonts)
-  for i in ${fonts[@]}; do
-    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  install -Dm644 $(printf "%q " "${fonts[@]}") -t "$pkgdir/usr/share/fonts/TTF"
 }
 
 package_ttf-firacode() {
   mkdir -p "$pkgname"
   unzip -q 'FiraCode.zip' -d "$pkgname"
-  local fonts=$(ls $pkgname/ttf/*)
-  for i in ${fonts[@]}; do
-    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/ttf/*)
+  install -Dm644 "${fonts[@]}" -t "$pkgdir/usr/share/fonts/TTF"
 }
 
 package_ttf-firacode-nf() {
   mkdir -p "$pkgname"
   unzip -q 'FiraCodeNF.zip' -d "$pkgname"
-  local fonts=$(ls ${pkgname}/*Complete.ttf)
-  fonts+=$(ls $pkgname/*Mono.ttf)
-  for i in ${fonts[@]}; do
-    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*Mono.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*Complete.ttf)
+  install -Dm644 $(printf "%q " "${fonts[@]}") -t "$pkgdir/usr/share/fonts/TTF"
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
 }
 
 package_ttf-lxgw-wenkai-screen() {
   mkdir -p "$pkgname"
-  local fonts=('LXGWWenKaiScreen.ttf', 'LXGWWenKaiScreenR.ttf')
-  for i in ${fonts[@]}; do
-    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  local fonts=('LXGWWenKaiScreen.ttf' 'LXGWWenKaiScreenR.ttf')
+  install -Dm644 $(printf "%q " "${fonts[@]}") -t "$pkgdir/usr/share/fonts/TTF"
 }
 
 package_ttf-lxgw-cleargothic-book() {
   mkdir -p "$pkgname"
   local fonts=('LXGWNewClearGothic-Book.ttf')
-  for i in ${fonts[@]}; do
-    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  install -Dm644 $(printf "%q " "${fonts[@]}") -t "$pkgdir/usr/share/fonts/TTF"
 }
