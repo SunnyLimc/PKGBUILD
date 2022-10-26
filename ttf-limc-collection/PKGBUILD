@@ -9,15 +9,23 @@ arch=('any')
 provides=('ttf-limc-collection')
 makedepends=(
   'unzip'
+  'p7zip'
 )
 source=(
   'FiraCode.zip::https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip'
   'FiraCodeNF.zip::https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip'
+  'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreen.ttf'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreenR.ttf'
   'https://github.com/lxgw/LxgwNewClearGothic/releases/download/v0.235/LXGWNewClearGothic-Book.ttf'
 )
 sha256sums=(
+  '0949915ba8eb24d89fd93d10a7ff623f42830d7c5ffc3ecbf960e4ecad3e3e79'
+  '20182e6e7c42cf8ab479d83af3200266261ec9bd4e80cdaceb793ecd56c9a398'
+  'd5cde19772923d07d498156762631936e54484f94e68403eb4517b4219a3288a'
+  'c5abd3121a9dad6afefed47aed17ac6229444ee9b22445c17006846addc0dc2a'
+  '89e5a74a677c8ad990193a90f9aee4762cf8eafe9980b6aef380291faf55b4ea'
+  '6128153f595f18cf15f97b99b008d60c957712ac6fdbff6e91e64d7845741963'
 )
 
 pkgver() {
@@ -26,6 +34,7 @@ pkgver() {
 
 #! put your ttf/ttc file extract from windows DIRECTLY
 #! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
+#! then put the zip to the '$pkgsrc' (if you havnt set it, usually is the "src/" subfolder of PKGBUILD)
 package_ttf-windows() {
   [[ ! -f "windows_fonts.zip" ]] && return 0
   mkdir -p "$pkgname"
@@ -74,6 +83,18 @@ package_ttf-lxgw-wenkai-screen() {
 package_ttf-lxgw-cleargothic-book() {
   mkdir -p "$pkgname"
   local fonts=('LXGWNewClearGothic-Book.ttf')
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
+}
+
+package_ttf-sarasa-gothic() {
+  mkdir -p "$pkgname"
+  # disable output(bso0) and progress output(bsp0) and extract(e)
+  # with overwrite-mode(aoa) to folder(o) "$pkgname"
+  7z -bso0 -bsp0 -aoa -o"$pkgname" e 'SarasaGothic.7z'
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*)
   for ((i = 0; i < ${#fonts[@]}; i++)); do
     install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
   done
