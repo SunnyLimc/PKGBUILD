@@ -26,44 +26,55 @@ pkgver() {
 
 #! put your ttf/ttc file extract from windows DIRECTLY
 #! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
-
 package_ttf-windows() {
-  [[ -f "windows_fonts.zip" ]] && {
-    mkdir -p "$pkgname"
-    unzip -q 'windows_fonts.zip' -d "$pkgname"
-    local fonts=$(ls windows_fonts/*.ttf)
-    fonts+=$(ls $pkgname/*.ttc)
-    [[ -z ${#fonts[@]} ]] && return 0
-    provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
-    conflicts+=(ttf-tahoma ttf-ms-fonts)
-    install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
-  }
+  [[ ! -f "windows_fonts.zip" ]] && return 0
+  mkdir -p "$pkgname"
+  unzip -q -o 'windows_fonts.zip' -d "$pkgname"
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
+  [[ -z ${#fonts[@]} ]] && return 0
+  provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
+  conflicts+=(ttf-tahoma ttf-ms-fonts)
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-firacode() {
   mkdir -p "$pkgname"
-  unzip -q 'FiraCode.zip' -d "$pkgname"
-  local fonts=$(ls $pkgname/ttf/*)
-  install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
+  unzip -q -o 'FiraCode.zip' -d "$pkgname"
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/ttf/*)
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-firacode-nf() {
   mkdir -p "$pkgname"
-  unzip -q 'FiraCodeNF.zip' -d "$pkgname"
-  local fonts=$(ls ${pkgname}/*Complete.ttf)
-  fonts+=$(ls $pkgname/*Mono.ttf)
-  install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
+  unzip -q -o 'FiraCodeNF.zip' -d "$pkgname"
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*Mono.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*Complete.ttf)
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
 }
 
 package_ttf-lxgw-wenkai-screen() {
   mkdir -p "$pkgname"
-  local fonts=('LXGWWenKaiScreen.ttf', 'LXGWWenKaiScreenR.ttf')
-  install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
+  local fonts=('LXGWWenKaiScreen.ttf' 'LXGWWenKaiScreenR.ttf')
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
 
 package_ttf-lxgw-cleargothic-book() {
   mkdir -p "$pkgname"
   local fonts=('LXGWNewClearGothic-Book.ttf')
-  install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
+  for ((i = 0; i < ${#fonts[@]}; i++)); do
+    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
+  done
 }
