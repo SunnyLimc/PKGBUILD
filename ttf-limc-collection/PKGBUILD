@@ -1,11 +1,12 @@
-pkgname=ttf-limc-collection
+pkgbase=ttf-limc-collection
+pkgname=(ttf-{windows,firacode,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
 pkgdesc='A font collections made by limc and aims to provide zh-* users a better looking'
-url='https://github.com/SunnyLimc/PKGBUILD/fonts-collection'
+url='https://github.com/SunnyLimc/PKGBUILD/ttf-limc-collection'
 arch=('any')
-provides=('ttf-limc')
+provides=('ttf-limc-collection')
 makedepends=(
   'unzip'
 )
@@ -20,7 +21,7 @@ sha256sums=(
 )
 
 pkgver() {
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  printf "r%s" "$(git rev-list --count HEAD)"
 }
 
 #! put your ttf/ttc file extract from windows DIRECTLY
