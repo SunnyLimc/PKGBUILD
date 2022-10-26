@@ -19,6 +19,7 @@ source=(
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreenR.ttf'
   'https://github.com/lxgw/LxgwNewClearGothic/releases/download/v0.235/LXGWNewClearGothic-Book.ttf'
 )
+noextract=("${source[@]##*/}")
 sha256sums=(
   '0949915ba8eb24d89fd93d10a7ff623f42830d7c5ffc3ecbf960e4ecad3e3e79'
   '20182e6e7c42cf8ab479d83af3200266261ec9bd4e80cdaceb793ecd56c9a398'
