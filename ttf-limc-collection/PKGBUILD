@@ -1,5 +1,5 @@
 pkgbase=ttf-limc-collection
-pkgname=(ttf-{windows,firacode,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
+pkgname=(ttf-{windows,firacode,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
