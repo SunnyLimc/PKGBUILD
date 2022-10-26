@@ -28,16 +28,15 @@ pkgver() {
 #! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
 
 package_ttf-windows() {
-  [[ -f "windows_fonts.zip" ]] && {
-    mkdir -p "$pkgname"
-    unzip -q 'windows_fonts.zip' -d "$pkgname"
-    local fonts=$(ls windows_fonts/*.ttf)
-    fonts+=$(ls $pkgname/*.ttc)
-    [[ -z ${#fonts[@]} ]] && return 0
-    provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
-    conflicts+=(ttf-tahoma ttf-ms-fonts)
-    install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
-  }
+  [[ ! -f "windows_fonts.zip" ]] && return 0
+  mkdir -p "$pkgname"
+  unzip -q 'windows_fonts.zip' -d "$pkgname"
+  local fonts=$(ls windows_fonts/*.ttf)
+  fonts+=$(ls $pkgname/*.ttc)
+  [[ -z ${#fonts[@]} ]] && return 0
+  provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
+  conflicts+=(ttf-tahoma ttf-ms-fonts)
+  install -Dm644 ${fonts[@]} -t "$pkgdir/usr/share/fonts/TTF"
 }
 
 package_ttf-firacode() {
