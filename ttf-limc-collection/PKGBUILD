@@ -18,7 +18,12 @@ makedepends=(
   'python-pip'
   'fontforge'
 )
+#! put your ttf/ttc file extract from windows DIRECTLY in
+#! (without wrap by any folder) a zip archive named 'WindowsFonts.zip'
+#! and put the archive the same folder as PKGBUILD
+#! OR remove the line of source above
 source=(
+  'file://WindowsFonts.zip' #! remove this line to bypass the installation of windows fonts
   'font-patcher::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/font-patcher'
   'FiraCodeNF.zip::https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip'
   'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
@@ -27,6 +32,7 @@ source=(
   'https://github.com/lxgw/LxgwNewClearGothic/releases/download/v0.235/LXGWNewClearGothic-Book.ttf'
 )
 noextract=(
+  'WindowsFonts.zip'
   'FiraCode.zip'
   'FiraCodeNF.zip'
   'SarasaGothic.7z'
@@ -52,10 +58,11 @@ prepare() {
   pipenv install configparser
   # nerd-fonts library
   git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
+  [[ -f "src/glyphs" ]] && return 0
   cd nerd-fonts
   git sparse-checkout set src/glyphs
   cd ..
-  mv nerd-fonts/src .
+  ln -sr nerd-fonts/src .
 }
 
 _prepare() {
@@ -86,13 +93,10 @@ _package() {
   done
 }
 
-#! put your ttf/ttc file extract from windows DIRECTLY
-#! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
-#! then put the zip to the '$pkgsrc' (if you havnt set it, usually is the "src/" subfolder of PKGBUILD)
 package_ttf-windows() {
-  [[ ! -f "windows_fonts.zip" ]] && return 0
+  [[ ! -f "WindowsFonts.zip" ]] && return 0
   _prepare
-  unzip -q -o 'windows_fonts.zip' -d "$pkgname"
+  unzip -q -o 'WindowsFonts.zip' -d "$pkgname"
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
   mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
