@@ -1,5 +1,6 @@
 # in order to use fontforge, configparser will be automatically install
 # to a user-level folder, with pipx + pipenv folder-level isolated environment
+#! may a long time of building needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
 pkgver=0.0.1
@@ -98,10 +99,32 @@ package_ttf-windows() {
   [[ ! -f "WindowsFonts.zip" ]] && return 0
   _prepare
   unzip -q -o 'WindowsFonts.zip' -d "$pkgname"
+  buildfonts=(
+    msgothic.ttc            # MS Gothic
+    YuGothR.ttc YuGothB.ttc # Yu Gothic
+    YuGothM.ttc             # Yu Gothic Medium
+    YuGothL.ttc             # Yu Gothic Light
+    malgun.ttf malgunbd.ttf # Malgun Gothic
+    malgunsl.ttf            # Malgun Gothic Semilight
+    simsun.ttc              # NSimSun
+    simsunb.ttf             # SimSun-ExtB
+    msyh.ttc msyhbd.ttc     # Microsoft YaHei
+    msyhl.ttc               # Microsoft YaHei Light
+    msjh.ttc msjhbd.ttc     # Microsoft JhengHei
+    msjhl.ttc               # Microsoft JhengHei Light
+    mingliub.ttc            # MingLiU_HKSCS-ExtB
+  )
+  local fonts
+  for i in "${buildfonts}"; do
+    fonts+="${pkgname}/${i}"
+  done
+  _build "${fonts[@]}"
+  unset fonts
+
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
   mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
-  _build "${fonts[@]}"
+  _pass_build "${fonts[@]}"
   _package
 }
 
@@ -110,7 +133,7 @@ package_ttf-firacode-nf() {
   unzip -q -o 'FiraCodeNF.zip' -d "$pkgname"
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*Mono.ttf)
-  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "dfpkgname"/*Complete.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*Complete.ttf)
   _pass_build "${fonts[@]}"
   _package
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
