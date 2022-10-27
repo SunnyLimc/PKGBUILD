@@ -86,7 +86,10 @@ _package() {
   done
 }
 
-build_ttf-windows() {
+#! put your ttf/ttc file extract from windows DIRECTLY
+#! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
+#! then put the zip to the '$pkgsrc' (if you havnt set it, usually is the "src/" subfolder of PKGBUILD)
+package_ttf-windows() {
   [[ ! -f "windows_fonts.zip" ]] && return 0
   _prepare
   unzip -q -o 'windows_fonts.zip' -d "$pkgname"
@@ -94,51 +97,35 @@ build_ttf-windows() {
   mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
   mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
   _build "${fonts[@]}"
-}
-
-#! put your ttf/ttc file extract from windows DIRECTLY
-#! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
-#! then put the zip to the '$pkgsrc' (if you havnt set it, usually is the "src/" subfolder of PKGBUILD)
-package_ttf-windows() {
-  [[ ! -f "windows_fonts.zip" ]] && return 0
   _package
 }
 
-build_ttf-firacode-nf() {
-  _build
+package_ttf-firacode-nf() {
+  _prepare
   unzip -q -o 'FiraCodeNF.zip' -d "$pkgname"
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*Mono.ttf)
   mapfile -O ${#fonts[@]} -t fonts < <(ls -d "dfpkgname"/*Complete.ttf)
   _pass_build "${fonts[@]}"
-}
-
-package_ttf-firacode-nf() {
   _package
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
 }
 
-build_ttf-lxgw-wenkai-screen() {
+package_ttf-lxgw-wenkai-screen() {
   _prepare
   local fonts=('LXGWWenKaiScreen.ttf' 'LXGWWenKaiScreenR.ttf')
   _build "${fonts[@]}"
-}
-
-package_ttf-lxgw-wenkai-screen() {
   _package
-}
-
-build_ttf-lxgw-cleargothic-book() {
-  _prepare
-  local fonts=('LXGWNewClearGothic-Book.ttf')
-  _build "${fonts[@]}"
 }
 
 package_ttf-lxgw-cleargothic-book() {
+  _prepare
+  local fonts=('LXGWNewClearGothic-Book.ttf')
+  _build "${fonts[@]}"
   _package
 }
 
-build_ttf-sarasa-gothic() {
+package_ttf-sarasa-gothic() {
   _prepare
   # disable output(bso0) and progress output(bsp0) and extract(e)
   # with overwrite-mode(aoa) to folder(o) "$pkgname"
@@ -146,8 +133,5 @@ build_ttf-sarasa-gothic() {
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*)
   _build "${fonts[@]}"
-}
-
-package_ttf-sarasa-gothic() {
   _package
 }
