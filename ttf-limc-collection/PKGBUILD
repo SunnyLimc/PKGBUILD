@@ -1,6 +1,6 @@
 # in order to use fontforge, configparser will be automatically install
 # to a user-level folder, with pipx + pipenv folder-level isolated environment
-#! may a long time of building needed, consider taking a cup of coffee 🍵
+#! may a long time of building is needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
 pkgver=0.0.1
