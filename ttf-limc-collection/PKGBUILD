@@ -60,15 +60,17 @@ prepare() {
   pipenv install configparser
   # nerd-fonts library
   git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
-  [[ -f "src/glyphs" ]] && return 0
+  [[ -d "src/glyphs" ]] && return 0
   cd nerd-fonts
   git sparse-checkout set src/glyphs
   cd ..
-  ln -sr nerd-fonts/src .
+  ln -srf nerd-fonts/src .
 }
 
 _prepare() {
+  rm -rf "$pkgname"
   mkdir -p "$pkgname"
+  rm -rf "${pkgname}"_new
   mkdir -p "${pkgname}"_new
 }
 
@@ -160,6 +162,6 @@ package_ttf-sarasa-gothic() {
   7z -bso0 -bsp0 -aoa -o"$pkgname" e 'SarasaGothic.7z'
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*)
-  _build "${fonts[@]}"
+  _pass_build "${fonts[@]}"
   _package
 }
