@@ -1,5 +1,7 @@
+# in order to use fontforge, configparser will be automatically install
+# to a user-level folder, with pipx + pipenv folder-level isolated environment
 pkgbase=ttf-limc-collection
-pkgname=(ttf-{windows,firacode,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
+pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
@@ -8,11 +10,16 @@ url='https://github.com/SunnyLimc/PKGBUILD/tree/main/ttf-limc-collection'
 arch=('any')
 provides=('ttf-limc-collection')
 makedepends=(
+  'git'
   'unzip'
   'p7zip'
+  # font-patcher.sh
+  'python'
+  'python-pip'
+  'fontforge'
 )
 source=(
-  'FiraCode.zip::https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip'
+  'font-patcher::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/font-patcher'
   'FiraCodeNF.zip::https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip'
   'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreen.ttf'
@@ -25,7 +32,7 @@ noextract=(
   'SarasaGothic.7z'
 )
 sha256sums=(
-  '0949915ba8eb24d89fd93d10a7ff623f42830d7c5ffc3ecbf960e4ecad3e3e79'
+  '388e1d04adca4be29b4f1f1888db45c3521cd96c26c41c20a1ccf992d2596479'
   '20182e6e7c42cf8ab479d83af3200266261ec9bd4e80cdaceb793ecd56c9a398'
   'd5cde19772923d07d498156762631936e54484f94e68403eb4517b4219a3288a'
   'c5abd3121a9dad6afefed47aed17ac6229444ee9b22445c17006846addc0dc2a'
@@ -37,70 +44,110 @@ pkgver() {
   printf "r%s" "$(git rev-list --count HEAD)"
 }
 
+prepare() {
+  # fontforge
+  /usr/bin/python -m pip install --user pipx
+  /usr/bin/python -m pipx ensurepath
+  /usr/bin/python -m pipx install pipenv
+  pipenv install configparser
+  # nerd-fonts library
+  git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
+  cd nerd-fonts
+  git sparse-checkout src/glyphs
+  cd ..
+  mv nerd-fonts/src .
+}
+
+_prepare() {
+  mkdir -p "$pkgname"
+  mkdir -p "${pkgname}"_new
+}
+
+_build() {
+  local fonts=("$@")
+  for i in "${fonts[@]}"; do
+    fontforge -script font-patcher -out "${pkgname}_new" "$i"
+  done
+}
+
+_pass_build() {
+  local fonts=("$@")
+  for i in "${fonts[@]}"; do
+    mv "$i" "${pkgname}"_new/
+  done
+}
+
+_package() {
+  local fonts
+  mapfile -t fonts < <(ls -d "${pkgname}"_new/*.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "${pkgname}"_new/*.ttc)
+  for i in "${fonts[@]}"; do
+    install -Dm644 "$i" -t "$pkgdir/usr/share/fonts/TTF"
+  done
+}
+
+build_ttf-windows() {
+  [[ ! -f "windows_fonts.zip" ]] && return 0
+  _prepare
+  unzip -q -o 'windows_fonts.zip' -d "$pkgname"
+  local fonts
+  mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
+  _build "${fonts[@]}"
+}
+
 #! put your ttf/ttc file extract from windows DIRECTLY
 #! (without wrap by any folder) in a zip archive named 'windows_fonts.zip'
 #! then put the zip to the '$pkgsrc' (if you havnt set it, usually is the "src/" subfolder of PKGBUILD)
 package_ttf-windows() {
   [[ ! -f "windows_fonts.zip" ]] && return 0
-  mkdir -p "$pkgname"
-  unzip -q -o 'windows_fonts.zip' -d "$pkgname"
-  local fonts
-  mapfile -t fonts < <(ls -d "$pkgname"/*.ttf)
-  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*.ttc)
-  [[ -z ${#fonts[@]} ]] && return 0
-  provides+=(emoji-font ttf-tahoma ttf-ms-fonts)
-  conflicts+=(ttf-tahoma ttf-ms-fonts)
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  _package
 }
 
-package_ttf-firacode() {
-  mkdir -p "$pkgname"
-  unzip -q -o 'FiraCode.zip' -d "$pkgname"
-  local fonts
-  mapfile -t fonts < <(ls -d "$pkgname"/ttf/*)
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
-}
-
-package_ttf-firacode-nf() {
-  mkdir -p "$pkgname"
+build_ttf-firacode-nf() {
+  _build
   unzip -q -o 'FiraCodeNF.zip' -d "$pkgname"
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*Mono.ttf)
-  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "$pkgname"/*Complete.ttf)
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  mapfile -O ${#fonts[@]} -t fonts < <(ls -d "dfpkgname"/*Complete.ttf)
+  _pass_build "${fonts[@]}"
+}
+
+package_ttf-firacode-nf() {
+  _package
   install -Dm644 "$pkgname/LICENSE" -t "$pkgdir/usr/share/licenses/$pkgname"
 }
 
-package_ttf-lxgw-wenkai-screen() {
-  mkdir -p "$pkgname"
+build_ttf-lxgw-wenkai-screen() {
+  _prepare
   local fonts=('LXGWWenKaiScreen.ttf' 'LXGWWenKaiScreenR.ttf')
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  _build "${fonts[@]}"
+}
+
+package_ttf-lxgw-wenkai-screen() {
+  _package
+}
+
+build_ttf-lxgw-cleargothic-book() {
+  _prepare
+  local fonts=('LXGWNewClearGothic-Book.ttf')
+  _build "${fonts[@]}"
 }
 
 package_ttf-lxgw-cleargothic-book() {
-  mkdir -p "$pkgname"
-  local fonts=('LXGWNewClearGothic-Book.ttf')
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  _package
 }
 
-package_ttf-sarasa-gothic() {
-  mkdir -p "$pkgname"
+build_ttf-sarasa-gothic() {
+  _prepare
   # disable output(bso0) and progress output(bsp0) and extract(e)
   # with overwrite-mode(aoa) to folder(o) "$pkgname"
   7z -bso0 -bsp0 -aoa -o"$pkgname" e 'SarasaGothic.7z'
   local fonts
   mapfile -t fonts < <(ls -d "$pkgname"/*)
-  for ((i = 0; i < ${#fonts[@]}; i++)); do
-    install -Dm644 "${fonts[$i]}" -t "$pkgdir/usr/share/fonts/TTF"
-  done
+  _build "${fonts[@]}"
+}
+
+package_ttf-sarasa-gothic() {
+  _package
 }
