@@ -53,7 +53,7 @@ prepare() {
   # nerd-fonts library
   git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
   cd nerd-fonts
-  git sparse-checkout src/glyphs
+  git sparse-checkout set src/glyphs
   cd ..
   mv nerd-fonts/src .
 }
