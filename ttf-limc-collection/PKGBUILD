@@ -51,7 +51,7 @@ prepare() {
   /usr/bin/python -m pipx install pipenv
   pipenv install configparser
   # nerd-fonts library
-  git -C nerd-fonts || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
+  git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
   cd nerd-fonts
   git sparse-checkout set src/glyphs
   cd ..
