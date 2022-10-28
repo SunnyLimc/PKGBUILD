@@ -10,7 +10,7 @@ pkgdesc='A font collection made by limc and aims to provide CJK users a better e
 url='https://github.com/SunnyLimc/PKGBUILD/tree/main/ttf-limc-collection'
 arch=('any')
 provides=('ttf-limc-collection')
-provides=('ttf-sarasa-gothic')
+depends=('ttf-sarasa-gothic')
 makedepends=(
   'git'
   'unzip'
