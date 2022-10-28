@@ -58,7 +58,7 @@ prepare() {
   /usr/bin/python -m pipx ensurepath
   /usr/bin/python -m pipx install pipenv
   # ensure use a clean pipenv to prevent error raising
-  [[ -f Pipfile ]] && pipenv --rm
+  rm -rf "$(pipenv --venv)"
   pipenv install configparser
   # nerd-fonts library
   git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
