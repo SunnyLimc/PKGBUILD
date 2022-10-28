@@ -173,4 +173,6 @@ package_ttf-lxgw-cleargothic-book() {
 #   mapfile -t fonts < <(ls -d "$pkgname"/*)
 #   _pass_build "${fonts[@]}"
 #   _package
-# }
+
+package_ttf-limc-collection() {
+}
