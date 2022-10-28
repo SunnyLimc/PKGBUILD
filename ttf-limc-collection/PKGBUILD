@@ -55,9 +55,9 @@ pkgver() {
 prepare() {
   # caveat
   clear
-  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
-  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
-  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
+  printf "\e[0;36mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
+  printf "\e[0;34mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
+  printf "\e[0;33mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
   sleep 5s
   # fontforge
   /usr/bin/python -m pip install --user pipx
@@ -126,7 +126,7 @@ package_ttf-windows() {
   )
   local fonts
   for i in "${buildfonts[@]}"; do
-    fonts+="${pkgname}/${i}"
+    fonts+=("${pkgname}/${i}")
   done
   _build "${fonts[@]}"
   unset fonts
