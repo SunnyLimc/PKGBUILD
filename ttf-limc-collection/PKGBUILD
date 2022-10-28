@@ -1,12 +1,12 @@
 # in order to use fontforge, configparser will be automatically install
 # to a user-level folder, with pipx + pipenv folder-level isolated environment
-#! may a long time of building is needed, consider taking a cup of coffee 🍵
+#! may a long time of building needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
-pkgdesc='A font collection made by limc and aims to provide CJK users a better experience'
+pkgdesc='A font collection made by limc and aims to provide zh-* users a better experience'
 url='https://github.com/SunnyLimc/PKGBUILD/tree/main/ttf-limc-collection'
 arch=('any')
 provides=('ttf-limc-collection')
@@ -53,18 +53,10 @@ pkgver() {
 }
 
 prepare() {
-  # caveat
-  clear
-  printf "\e[0;36mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
-  printf "\e[0;34mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
-  printf "\e[0;33mmay a long time of building and patching is needed, consider taking a cup of coffee :) 🍵\n\e[0m"
-  sleep 5s
   # fontforge
   /usr/bin/python -m pip install --user pipx
   /usr/bin/python -m pipx ensurepath
   /usr/bin/python -m pipx install pipenv
-  # ensure use a clean pipenv to prevent error raising
-  rm -rf "$(pipenv --venv)"
   pipenv install configparser
   # nerd-fonts library
   git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
@@ -125,8 +117,8 @@ package_ttf-windows() {
     mingliub.ttc            # MingLiU_HKSCS-ExtB
   )
   local fonts
-  for i in "${buildfonts[@]}"; do
-    fonts+=("${pkgname}/${i}")
+  for i in "${buildfonts}"; do
+    fonts+="${pkgname}/${i}"
   done
   _build "${fonts[@]}"
   unset fonts
