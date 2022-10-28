@@ -123,10 +123,6 @@ package_ttf-windows() {
     fonts+="${pkgname}/${i}"
   done
   _build "${fonts[@]}"
-  # remove to prevent from overwriting
-  for i in "${buildfonts}"; do
-    rm -f "$pkgname"/$i
-  done
   unset fonts
 
   local fonts
