@@ -175,4 +175,5 @@ package_ttf-lxgw-cleargothic-book() {
 #   _package
 
 package_ttf-limc-collection() {
+  _pass_build
 }
