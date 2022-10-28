@@ -6,7 +6,7 @@ pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,saras
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
-pkgdesc='A font collection made by limc and aims to provide zh-* users a better experience'
+pkgdesc='A font collection made by limc and aims to provide CJK users a better experience'
 url='https://github.com/SunnyLimc/PKGBUILD/tree/main/ttf-limc-collection'
 arch=('any')
 provides=('ttf-limc-collection')
@@ -53,6 +53,12 @@ pkgver() {
 }
 
 prepare() {
+  # caveat
+  clear
+  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
+  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
+  printf "may a long time of building and patching is needed, consider taking a cup of coffee :) 🍵"
+  sleep 5s
   # fontforge
   /usr/bin/python -m pip install --user pipx
   /usr/bin/python -m pipx ensurepath
@@ -119,7 +125,7 @@ package_ttf-windows() {
     mingliub.ttc            # MingLiU_HKSCS-ExtB
   )
   local fonts
-  for i in "${buildfonts}"; do
+  for i in "${buildfonts[@]}"; do
     fonts+="${pkgname}/${i}"
   done
   _build "${fonts[@]}"
