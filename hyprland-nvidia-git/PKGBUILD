@@ -1,5 +1,5 @@
 pkgname=hyprland-nvidia-git
-pkgver=.r1957.989deaf
+pkgver=0.16.0.r1957.989deaf
 pkgrel=1
 license=('BSD')
 pkgdesc='A dynamic tiling Wayland compositor based on wlroots-eglstream (git ver, with nvidia, hidpi patches)'
@@ -62,7 +62,7 @@ sha256sums=(
 pkgver() {
 	cd "${pkgname}"
 	set -o pipefail
-	grep -zoP "project\([^)]*\)" meson.build | xargs --null echo | perl -ne '/\sversion:\s'"'"'([0-9.]*).*'"'"'/ and print $1'
+	grep -zoP "project\([^)]*\)" meson.build | xargs --null echo | perl -ne '/\sversion\s:\s'"'"'([0-9.]*).*'"'"'/ and print $1'
 	printf ".r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
