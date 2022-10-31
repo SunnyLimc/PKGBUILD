@@ -66,6 +66,7 @@ pkgver() {
 
 build() {
 	cd "${pkgname}"
+	git -C subprojects/wlroots submodule update --init
 	git -C subprojects/wlroots revert -n 18595000f3a21502fd60bf213122859cc348f9af
 	make fixwlr
 	patch -N -p1 -d subprojects/wlroots < ../hidpi.patch
