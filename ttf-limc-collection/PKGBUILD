@@ -2,7 +2,7 @@
 # to a user-level folder, with pipx + pipenv folder-level isolated environment
 #! may a long time of building is needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
-pkgname=(ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book,sarasa-gothic})
+pkgname=($pkgbase ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
 pkgver=0.0.1
 pkgrel=1
 license=('custom')
@@ -10,6 +10,7 @@ pkgdesc='A font collection made by limc and aims to provide CJK users a better e
 url='https://github.com/SunnyLimc/PKGBUILD/tree/main/ttf-limc-collection'
 arch=('any')
 provides=('ttf-limc-collection')
+depends=('ttf-sarasa-gothic')
 makedepends=(
   'git'
   'unzip'
@@ -27,7 +28,7 @@ source=(
   'file://WindowsFonts.zip' #! remove this line to bypass the installation of windows fonts
   'font-patcher::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/font-patcher'
   'FiraCodeNF.zip::https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip'
-  'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
+  # 'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreen.ttf'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreenR.ttf'
   'https://github.com/lxgw/LxgwNewClearGothic/releases/download/v0.235/LXGWNewClearGothic-Book.ttf'
@@ -42,7 +43,7 @@ sha256sums=(
   'SKIP'
   '388e1d04adca4be29b4f1f1888db45c3521cd96c26c41c20a1ccf992d2596479'
   '20182e6e7c42cf8ab479d83af3200266261ec9bd4e80cdaceb793ecd56c9a398'
-  'd5cde19772923d07d498156762631936e54484f94e68403eb4517b4219a3288a'
+  # 'd5cde19772923d07d498156762631936e54484f94e68403eb4517b4219a3288a'
   'c5abd3121a9dad6afefed47aed17ac6229444ee9b22445c17006846addc0dc2a'
   '89e5a74a677c8ad990193a90f9aee4762cf8eafe9980b6aef380291faf55b4ea'
   '6128153f595f18cf15f97b99b008d60c957712ac6fdbff6e91e64d7845741963'
@@ -163,13 +164,16 @@ package_ttf-lxgw-cleargothic-book() {
   _package
 }
 
-package_ttf-sarasa-gothic() {
-  _prepare
-  # disable output(bso0) and progress output(bsp0) and extract(e)
-  # with overwrite-mode(aoa) to folder(o) "$pkgname"
-  7z -bso0 -bsp0 -aoa -o"$pkgname" e 'SarasaGothic.7z'
-  local fonts
-  mapfile -t fonts < <(ls -d "$pkgname"/*)
-  _pass_build "${fonts[@]}"
-  _package
+# package_ttf-sarasa-gothic() {
+#   _prepare
+#   # disable output(bso0) and progress output(bsp0) and extract(e)
+#   # with overwrite-mode(aoa) to folder(o) "$pkgname"
+#   7z -bso0 -bsp0 -aoa -o"$pkgname" e 'SarasaGothic.7z'
+#   local fonts
+#   mapfile -t fonts < <(ls -d "$pkgname"/*)
+#   _pass_build "${fonts[@]}"
+#   _package
+
+package_ttf-limc-collection() {
+  _pass_build
 }
