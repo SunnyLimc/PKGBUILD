@@ -1,5 +1,5 @@
 pkgname=wlroots-hidpi-git
-pkgver=0.15.1.r5802.c2d2773d
+pkgver=0.16.0.r5808.4d04144b
 pkgrel=1
 license=('MIT')
 pkgdesc='Modular Wayland compositor library (git ver, hidpi patch, commit revert)'
@@ -34,7 +34,7 @@ makedepends=(
 )
 source=(
 	"${pkgname}::git+${url}.git"
-	"https://gitlab.freedesktop.org/lilydjwg/wlroots/-/commit/6c5ffcd1fee9e44780a6a8792f74ecfbe24a1ca7.diff"
+	"hidpi.patch::https://gitlab.freedesktop.org/lilydjwg/wlroots/-/commit/6c5ffcd1fee9e44780a6a8792f74ecfbe24a1ca7.diff"
 )
 sha256sums=(
 	'SKIP'
@@ -47,13 +47,9 @@ pkgver() {
 	printf ".r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
-prepare() {
-	cd "${pkgname}"
-	git revert -n 18595000f3a21502fd60bf213122859cc348f9af
-	patch -N -p1 <../6c5ffcd1fee9e44780a6a8792f74ecfbe24a1ca7.diff
-}
-
 build() {
+	git -C "${pkgname}" revert -n 18595000f3a21502fd60bf213122859cc348f9af
+	patch -N -p1 -d "${pkgname}" < hidpi.patch
 	arch-meson "${pkgname}" build
 	meson compile -C build
 }

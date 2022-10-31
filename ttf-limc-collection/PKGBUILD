@@ -3,7 +3,7 @@
 #! may a long time of building is needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=($pkgbase ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
-pkgver=0.0.1
+pkgver=r43
 pkgrel=1
 license=('custom')
 pkgdesc='A font collection made by limc and aims to provide CJK users a better experience'
@@ -25,28 +25,28 @@ makedepends=(
 #! and put the archive the same folder as PKGBUILD
 #! OR remove the line of source above
 source=(
-  'file://WindowsFonts.zip' #! remove this line to bypass the installation of windows fonts
   'font-patcher::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/font-patcher'
   'FiraCodeNF.zip::https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/FiraCode.zip'
   # 'SarasaGothic.7z::https://github.com/be5invis/Sarasa-Gothic/releases/download/v0.37.4/sarasa-gothic-ttc-0.37.4.7z'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreen.ttf'
   'https://github.com/lxgw/LxgwWenKai-Screen/releases/download/v1.245/LXGWWenKaiScreenR.ttf'
   'https://github.com/lxgw/LxgwNewClearGothic/releases/download/v0.235/LXGWNewClearGothic-Book.ttf'
+  'file://WindowsFonts.zip' #! remove this line to bypass the installation of windows fonts
 )
 noextract=(
-  'WindowsFonts.zip'
   'FiraCode.zip'
   'FiraCodeNF.zip'
   'SarasaGothic.7z'
+  'WindowsFonts.zip'
 )
 sha256sums=(
-  'SKIP'
   '388e1d04adca4be29b4f1f1888db45c3521cd96c26c41c20a1ccf992d2596479'
   '20182e6e7c42cf8ab479d83af3200266261ec9bd4e80cdaceb793ecd56c9a398'
   # 'd5cde19772923d07d498156762631936e54484f94e68403eb4517b4219a3288a'
   'c5abd3121a9dad6afefed47aed17ac6229444ee9b22445c17006846addc0dc2a'
   '89e5a74a677c8ad990193a90f9aee4762cf8eafe9980b6aef380291faf55b4ea'
   '6128153f595f18cf15f97b99b008d60c957712ac6fdbff6e91e64d7845741963'
+  'SKIP'
 )
 
 pkgver() {
@@ -69,10 +69,8 @@ prepare() {
   pipenv install configparser
   # nerd-fonts library
   git -C nerd-fonts pull || git clone --sparse --depth 1 --branch master --single-branch --filter=blob:none https://github.com/ryanoasis/nerd-fonts.git nerd-fonts
-  [[ -d "src/glyphs" ]] && return 0
-  cd nerd-fonts
-  git sparse-checkout set src/glyphs
-  cd ..
+  [[ -d src/glyphs ]] && return 0
+  git -C nerd-fonts sparse-checkout set src/glyphs
   ln -srf nerd-fonts/src .
 }
 
