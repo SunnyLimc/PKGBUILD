@@ -1,0 +1,28 @@
+pkgname=clash-tuner
+pkgver=r49
+pkgrel=1
+license=('MIT')
+pkgdesc='A faster way to switch from clash configs'
+url='https://github.com/SunnyLimc/PKGBUILD/tree/main/clash-tuner'
+arch=('any')
+source=(
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-meta-tuner-perm@.service'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-meta-tuner@.service'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.service'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.sh'
+)
+sha256sums=('a429c89e891105c8a6a9326d629ee7197d24cec3608bcba2a29f9eb05980942b'
+            'e8a2ac3ba3de132d27cf2cd29e0a0d5d63874ff174beec7a7b42e54cc3a63165'
+            '76bcd1d9caa67cbdcdbc4a7236d97e14dc1254c61e197f72177e53bc6fc0c4d5'
+            'd429badc45cf2f558f8807c6fbd3747d1c59536cb3649432b20ea2044bb2fbd7')
+
+pkgver() {
+  printf "r%s" "$(git rev-list --count HEAD)"
+}
+
+package() {
+  install -Dm644 "clash-meta-tuner-perm@.service" -t "${pkgdir}/usr/lib/systemd/system/clash-meta-tuner@.service"
+  install -Dm644 "clash-meta-tuner@.service" -t "${pkgdir}/usr/lib/systemd/user/clash-meta-tuner@.service"
+  install -Dm644 "clash-tuner.service" -t "${pkgdir}/usr/lib/systemd/system/clash-tuner.service"
+  install -Dm744 "clash-tuner.sh" -t "${pkgdir}/usr/bin/clash-tuner"
+}

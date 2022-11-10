@@ -1,13 +1,13 @@
 pkgname=xorg-xwayland-hidpi-git
-pkgver=21.1.99.1.r17918.395c25f18
+pkgver=21.1.99.1.r17923.459e28557
 pkgrel=1
 license=('custom')
 pkgdesc='run X clients under wayland (git ver, hidpi patch)'
-url='https://gitlab.freedesktop.org/xorg/xserver'
+url=https://gitlab.freedesktop.org/xorg/xserver
 arch=('x86_64')
 groups=('xorg')
-provides=("xorg-xwayland=${pkgver/.r*/}" "xorg-xwayland-git")
-conflicts=("xorg-xwayland" "xorg-xwayland-git")
+provides=("xorg-xwayland=${pkgver/.r*/}" xorg-xwayland-git)
+conflicts=(xorg-xwayland xorg-xwayland-git)
 depends=('nettle' 'libegl' 'libepoxy' 'systemd-libs' 'libxfont2'
   'pixman' 'xorg-server-common' 'libxcvt'
 )
@@ -27,22 +27,21 @@ sha256sums=(
   '8cc556c4a68d354d19e11b5292e35fb41172bf08873a47a34493898163920709'
 )
 pkgver() {
-  cd "${pkgname}"
+  cd "$pkgname"
   set -o pipefail
   grep -zoP "project\([^)]*\)" meson.build | xargs --null echo | perl -ne '/\sversion:\s'"'"'([0-9.]*).*'"'"'/ and print $1'
   printf ".r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
-prepare() {
-  cd "${pkgname}"
-  patch -N -p1 <../xwayland-hidpi.patch
-}
-
 build() {
+  git -C hyprland pull || git clone --sparse --depth 1 --branch main --single-branch --filter=blob:none https://github.com/hyprwm/Hyprland.git hyprland
+  [[ -d hyprland/nix ]] || git -C hyprland sparse-checkout set nix
+  patch -N -p1 -d "$pkgname" < xwayland-hidpi.patch
+  patch -N -p1 -d "$pkgname" < hyprland/nix/xwayland-vsync.patch
   # dont build other things
   # add default parameters as the official PKGBUILD
   # remove xkb_path setting due to the bug of missing config in runtime
-  arch-meson "${pkgname}" build \
+  arch-meson "$pkgname" build \
     -D xorg=false \
     -D xwayland=true \
     -D xvfb=false \
@@ -64,9 +63,9 @@ build() {
 
 package() {
   # bin + manpage + .pc file
-  install -m755 -Dt "${pkgdir}"/usr/bin build/hw/xwayland/Xwayland
-  install -m644 -Dt "${pkgdir}"/usr/share/man/man1 build/hw/xwayland/Xwayland.1
-  install -m644 -Dt "${pkgdir}"/usr/lib/pkgconfig build/hw/xwayland/xwayland.pc
+  install -m755 -Dt "$pkgdir"/usr/bin build/hw/xwayland/Xwayland
+  install -m644 -Dt "$pkgdir"/usr/share/man/man1 build/hw/xwayland/Xwayland.1
+  install -m644 -Dt "$pkgdir"/usr/lib/pkgconfig build/hw/xwayland/xwayland.pc
   # license
-  install -m644 -Dt "${pkgdir}/usr/share/licenses/${pkgname}" "${pkgname}"/COPYING
+  install -m644 -Dt "${pkgdir}/usr/share/licenses/${pkgname}" "$pkgname"/COPYING
 }

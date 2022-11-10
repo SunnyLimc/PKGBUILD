@@ -1,5 +1,9 @@
 pkgname=wlroots-hidpi-git
+<<<<<<< HEAD
 pkgver=0.15.1.r5802.c2d2773d
+=======
+pkgver=0.16.0.r5808.4d04144b
+>>>>>>> staging
 pkgrel=1
 license=('MIT')
 pkgdesc='Modular Wayland compositor library (git ver, hidpi patch, commit revert)'
@@ -34,6 +38,7 @@ makedepends=(
 )
 source=(
 	"${pkgname}::git+${url}.git"
+<<<<<<< HEAD
 	"https://gitlab.freedesktop.org/lilydjwg/wlroots/-/commit/6c5ffcd1fee9e44780a6a8792f74ecfbe24a1ca7.diff"
 )
 <<<<<<< HEAD
@@ -45,18 +50,27 @@ sha256sum=(
 =======
 sha256sums=(
 >>>>>>> d96b333 (fix(pkg): sha256sums typo)
+=======
+	"hidpi.patch::https://gitlab.freedesktop.org/lilydjwg/wlroots/-/commit/6c5ffcd1fee9e44780a6a8792f74ecfbe24a1ca7.diff"
+)
+sha256sums=(
+>>>>>>> staging
 	'SKIP'
 	'403f2d4009a0d3c98191b1033e575c9c1c606904c67b5d217b4bae06d0f2ba2c'
 )
 pkgver() {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 8c662be (fix: remove duplicate lines from wlroots)
+=======
+>>>>>>> staging
 	cd "${pkgname}"
 	set -o pipefail
 	grep -zoP "project\([^)]*\)" meson.build | xargs --null echo | perl -ne '/\sversion:\s'"'"'([0-9.]*).*'"'"'/ and print $1'
 	printf ".r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+<<<<<<< HEAD
 <<<<<<< HEAD
 }
 
@@ -67,6 +81,13 @@ prepare() {
 }
 
 build() {
+=======
+}
+
+build() {
+	git -C "${pkgname}" revert -n 18595000f3a21502fd60bf213122859cc348f9af
+	patch -N -p1 -d "${pkgname}" < hidpi.patch
+>>>>>>> staging
 	arch-meson "${pkgname}" build
 	meson compile -C build
 }
@@ -75,6 +96,7 @@ package() {
 	meson install -C build --destdir "${pkgdir}"
 	install -Dm644 "${pkgname}/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
 }
+<<<<<<< HEAD
 =======
   cd "${pkgname}"
   set -o pipefail
@@ -106,3 +128,5 @@ sha256sums=('SKIP'
 >>>>>>> 3ed916b (feat(pack): add wlroots-git)
 =======
 >>>>>>> 8c662be (fix: remove duplicate lines from wlroots)
+=======
+>>>>>>> staging

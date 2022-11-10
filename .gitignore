@@ -1,5 +1,9 @@
-**/src/**
-**/pkg/**
-**/srcpkg/**
-**/*.zst
-**/*.sig
+**/*
+!*/
+src
+pkg
+srcpkg
+!**/PKGBUILD
+!**/*.patch
+!**/*.sh
+!**/*.service
