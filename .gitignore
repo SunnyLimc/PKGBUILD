@@ -5,3 +5,5 @@ pkg
 srcpkg
 !**/PKGBUILD
 !**/*.patch
+!**/*.sh
+!**/*.service
