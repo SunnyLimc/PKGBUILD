@@ -1,0 +1,17 @@
+[Unit]
+Description=Start clash-tuner at system boot
+After=network-online.target default.target
+
+[Service]
+Type=exec
+# you can overwrite this line by executing `systemctl edit clash-tuner` from shell
+# ExecStart=sh -c "/usr/bin/clash-tuner [user] [conf] [perm] [pidpath]"
+# [user] eg. limc (default is limc)
+# [conf] eg. / (the default lies on XDG_CONFIG, value='/'), if you set to `iqzone`, then the realpath will be converted to `~$[user]/.config/clash/iqzone`
+# [perm] bool, eg. true (default is false), enable addition permission for the user using clash (eg. modify iptables, or bind limited ports)
+# [backend], eg. clash, the default is `clash-meta`
+# leave anything empty to use the default value
+ExecStart=bash -c '/usr/bin/clash-tuner limc iqzone true'
+
+[Install]
+WantedBy=default.target
