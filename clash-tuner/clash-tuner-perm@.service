@@ -11,7 +11,7 @@ Type=exec
 # [perm] bool, eg. true (default is false), enable addition permission for the user using clash (eg. modify iptables, or bind limited ports)
 # [backend], eg. clash, the default is `clash-meta`
 # leave anything empty to use the default value
-ExecStart=bash -c '/usr/bin/clash-tuner limc iqzone true clash-meta'
+ExecStart=bash -c '/usr/bin/clash-tuner limc iqzone true'
 
 [Install]
 WantedBy=default.target

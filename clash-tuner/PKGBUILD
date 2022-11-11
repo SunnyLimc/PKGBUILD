@@ -11,18 +11,16 @@ source=(
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.service'
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.sh'
 )
-sha256sums=('a429c89e891105c8a6a9326d629ee7197d24cec3608bcba2a29f9eb05980942b'
-            'e8a2ac3ba3de132d27cf2cd29e0a0d5d63874ff174beec7a7b42e54cc3a63165'
-            '76bcd1d9caa67cbdcdbc4a7236d97e14dc1254c61e197f72177e53bc6fc0c4d5'
-            'd429badc45cf2f558f8807c6fbd3747d1c59536cb3649432b20ea2044bb2fbd7')
+sha256sums=('34a1d13cdacf651932104e3ec84564c3a25538e39b5b89f4873bf72c7f731684'
+            'ca859c9fb6a2ea9bb71f9a8efdf82e4279b444c13b2c4294d5b0cee33ae23f88'
+            '54fff5e29a2af86fe137486b5c63e3264b41971d69524cc71c043ee221c8763b'
+            '9299ff9d4207914985c250f88b183b3cfd55f43c5de32f951b0ed0fdd87ddc55')
 
 pkgver() {
   printf "r%s" "$(git rev-list --count HEAD)"
 }
 
 package() {
-  install -Dm644 "clash-meta-tuner-perm@.service" -t "${pkgdir}/usr/lib/systemd/system/clash-meta-tuner@.service"
-  install -Dm644 "clash-meta-tuner@.service" -t "${pkgdir}/usr/lib/systemd/user/clash-meta-tuner@.service"
-  install -Dm644 "clash-tuner.service" -t "${pkgdir}/usr/lib/systemd/system/clash-tuner.service"
-  install -Dm744 "clash-tuner.sh" -t "${pkgdir}/usr/bin/clash-tuner"
+  install -Dm644 *.service -t "${pkgdir}/usr/lib/systemd/system/"
+  install -Dm755 "clash-tuner.sh" -T "${pkgdir}/usr/bin/clash-tuner"
 }
