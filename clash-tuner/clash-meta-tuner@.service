@@ -5,5 +5,6 @@ After=network-online.target
 [Service]
 Type=exec
 EnvironmentFile=/usr/lib/clash-tuner/env
+User=%i
 Restart=on-abort
 ExecStart=bash -c "/usr/bin/clash-meta -d $$conf"
