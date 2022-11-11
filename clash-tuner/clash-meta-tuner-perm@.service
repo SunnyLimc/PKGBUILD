@@ -1,5 +1,6 @@
 [Unit]
 Description=a tuner to start clash-meta with specific config
+After=network-online.target
 
 [Service]
 Type=exec
@@ -8,4 +9,4 @@ User=%i
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 Restart=on-abort
-ExecStart=bash -c "echo $$conf && /usr/bin/clash-meta -d $$conf"
+ExecStart=bash -c "/usr/bin/clash-meta -d $$conf"

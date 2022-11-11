@@ -1,5 +1,6 @@
 [Unit]
 Description=a tuner to start clash-meta with specific config
+After=network-online.target
 
 [Service]
 Type=exec
