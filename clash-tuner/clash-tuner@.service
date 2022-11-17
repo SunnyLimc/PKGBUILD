@@ -1,0 +1,10 @@
+[Unit]
+Description=a tuner to start clash with specific config
+After=network-online.target
+
+[Service]
+Type=exec
+EnvironmentFile=/usr/lib/clash-tuner/env
+User=%i
+Restart=on-abort
+ExecStart=bash -c "/usr/bin/clash -d $$conf"

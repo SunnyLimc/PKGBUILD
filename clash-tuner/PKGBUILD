@@ -1,5 +1,5 @@
 pkgname=clash-tuner
-pkgver=r50
+pkgver=r51
 pkgrel=1
 license=('MIT')
 pkgdesc='A faster way to switch from clash configs'
@@ -8,13 +8,19 @@ arch=('any')
 source=(
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-meta-tuner-perm@.service'
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-meta-tuner@.service'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner-perm@.service'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner@.service'
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.service'
   'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.sh'
+  'https://raw.githubusercontent.com/SunnyLimc/PKGBUILD/staging/clash-tuner/clash-tuner.xml'
 )
 sha256sums=('34a1d13cdacf651932104e3ec84564c3a25538e39b5b89f4873bf72c7f731684'
             '91540a0b77735f6109f9c004a9bf7ab3e1e63834a9a863d740afe559f47d9524'
+            '15ec99fac6523ea1fb893cfaadfff0836d028fa0d07acdcc90a8b1c80cc66b48'
+            '0261d854eb797c3520e467ddacb26c9276fffba7d292ec9367458b625cf5ced4'
             '54fff5e29a2af86fe137486b5c63e3264b41971d69524cc71c043ee221c8763b'
-            '9299ff9d4207914985c250f88b183b3cfd55f43c5de32f951b0ed0fdd87ddc55')
+            '9e7637167c8a2fbf6c9a50252a2df2d3ec4b7003533937bb268ff57bd17de51c'
+            '8931d415192ff86a01ec1be70edf22ecab10f010616b43e2708a2be6cfa84e6b')
 
 pkgver() {
   printf "r%s" "$(git rev-list --count HEAD)"
@@ -23,4 +29,5 @@ pkgver() {
 package() {
   install -Dm644 *.service -t "${pkgdir}/usr/lib/systemd/system/"
   install -Dm755 "clash-tuner.sh" -T "${pkgdir}/usr/bin/clash-tuner"
+  install -Dm644 "clash-tuner.xml" -t "${pkgdir}/usr/lib/firewalld/services/"
 }

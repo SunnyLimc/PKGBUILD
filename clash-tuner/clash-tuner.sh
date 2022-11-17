@@ -12,7 +12,7 @@ main() {
   [[ $dnsfix = true ]] && kill -HUP $(ps -ef | grep -E 'dnsmasq.*Net' | grep -v grep | awk '{print $2}') 
   # main
   local user=${1:-limc} conf=${2:-/} perm=${3:-false} backend=${4:-clash-meta}
-  local pidpath="/run/${backend}.pid"
+  local pidpath="/run/clash-tuner.pid"
   conf="$(eval echo "~$user")/.config/clash/$conf"
   # remove duplicated tailing slashes
   conf=${conf%//*}
