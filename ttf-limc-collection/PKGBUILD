@@ -3,7 +3,7 @@
 #! may a long time of building is needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=($pkgbase ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
-pkgver=r43
+pkgver=r52
 pkgrel=1
 license=('custom')
 pkgdesc='A font collection made by limc and aims to provide CJK users a better experience'
@@ -108,20 +108,21 @@ package_ttf-windows() {
   [[ ! -f "WindowsFonts.zip" ]] && return 0
   _prepare
   unzip -q -o 'WindowsFonts.zip' -d "$pkgname"
+  # do not patch any fonts by default
   buildfonts=(
-    msgothic.ttc            # MS Gothic
-    YuGothR.ttc YuGothB.ttc # Yu Gothic
-    YuGothM.ttc             # Yu Gothic Medium
-    YuGothL.ttc             # Yu Gothic Light
-    malgun.ttf malgunbd.ttf # Malgun Gothic
-    malgunsl.ttf            # Malgun Gothic Semilight
-    simsun.ttc              # NSimSun
-    simsunb.ttf             # SimSun-ExtB
-    msyh.ttc msyhbd.ttc     # Microsoft YaHei
-    msyhl.ttc               # Microsoft YaHei Light
-    msjh.ttc msjhbd.ttc     # Microsoft JhengHei
-    msjhl.ttc               # Microsoft JhengHei Light
-    mingliub.ttc            # MingLiU_HKSCS-ExtB
+    # msgothic.ttc            # MS Gothic
+    # YuGothR.ttc YuGothB.ttc # Yu Gothic
+    # YuGothM.ttc             # Yu Gothic Medium
+    # YuGothL.ttc             # Yu Gothic Light
+    # malgun.ttf malgunbd.ttf # Malgun Gothic
+    # malgunsl.ttf            # Malgun Gothic Semilight
+    # simsun.ttc              # NSimSun
+    # simsunb.ttf             # SimSun-ExtB
+    # msyh.ttc msyhbd.ttc     # Microsoft YaHei
+    # msyhl.ttc               # Microsoft YaHei Light
+    # msjh.ttc msjhbd.ttc     # Microsoft JhengHei
+    # msjhl.ttc               # Microsoft JhengHei Light
+    # mingliub.ttc            # MingLiU_HKSCS-ExtB
   )
   local fonts
   for i in "${buildfonts[@]}"; do

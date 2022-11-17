@@ -122,6 +122,15 @@ _ttf_ms_win11_other=(
 ebrima.ttf     ebrimabd.ttf                                 # Ebrima
 gadugi.ttf     gadugib.ttf                                  # Gadugi
 mvboli.ttf                                                  # MV Boli
+
+###
+### Not included in the distribution, added for a personal favor
+###
+Deng.ttf       Dengb.ttf
+Dengl.ttf
+simhei.ttf
+simfang.ttf
+simkai.ttf
 )
 
 copygrp=("_ttf_ms_win11"
