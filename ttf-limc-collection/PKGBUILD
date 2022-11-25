@@ -3,7 +3,7 @@
 #! may a long time of building is needed, consider taking a cup of coffee 🍵
 pkgbase=ttf-limc-collection
 pkgname=($pkgbase ttf-{windows,firacode-nf,lxgw-wenkai-screen,lxgw-cleargothic-book})
-pkgver=r52
+pkgver=r53
 pkgrel=1
 license=('custom')
 pkgdesc='A font collection made by limc and aims to provide CJK users a better experience'
