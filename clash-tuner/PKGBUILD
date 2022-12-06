@@ -1,5 +1,5 @@
 pkgname=clash-tuner
-pkgver=r55
+pkgver=r59
 pkgrel=1
 license=('MIT')
 pkgdesc='A faster way to switch from clash configs'
@@ -20,7 +20,7 @@ sha256sums=('34a1d13cdacf651932104e3ec84564c3a25538e39b5b89f4873bf72c7f731684'
             '91540a0b77735f6109f9c004a9bf7ab3e1e63834a9a863d740afe559f47d9524'
             '15ec99fac6523ea1fb893cfaadfff0836d028fa0d07acdcc90a8b1c80cc66b48'
             '0261d854eb797c3520e467ddacb26c9276fffba7d292ec9367458b625cf5ced4'
-            'ba1f34daf80cd0d83e712ff54329f0bc1dd112fdc9f464c8f737b949df111f9f'
+            'd692ce3136fd744d65db4fedf8f0147d8a861fc4cf4d1524885502ef56a82230'
             'aa9a39a89ccd031d4a16afc2e80a117cdde835de9c9c9a5730a36bd466bb0591'
             '8931d415192ff86a01ec1be70edf22ecab10f010616b43e2708a2be6cfa84e6b'
             'e45a13527bc7689699dc4fb20d4153b9ea02a847287c8fd691db6b393dc1db62')
