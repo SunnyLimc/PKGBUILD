@@ -7,7 +7,10 @@ pidpath="/run/clash-tuner.pid"
 _refresh_dns() {
   local provider=${1:-system}
   local confpath='/etc/NetworkManager/dnsmasq.d/zzz-clash_tuner_dnsfix_dns.conf'
-  systemctl is-active --quiet NetworkManager && ps -ef | grep -E 'dnsmasq.*Net' | grep -v grep > /dev/null || (echo "[DNS] You are not currently using Dnsmasq with Networkmanager, configuration skipped." && return 0)
+  if !(systemctl is-active --quiet NetworkManager && ps -ef | grep -E 'dnsmasq.*Net' | grep -v grep > /dev/null); then
+    echo "[DNS] You are not currently using Dnsmasq with Networkmanager, configuration skipped."
+    return 0
+  fi
   if [[ $provider = system ]]; then
     [[ -f $confpath ]] && rm $confpath && echo "[DNS] Dnsmasq config added by clash-tuner has been removed (rm: $confpath)"
   elif [[ $provider = dns ]]; then
@@ -38,7 +41,8 @@ _start() {
   ping -c1 -W2 cdn.jsdelivr.net > /dev/null || (echo "[WARN] Try to fix network error" && _refresh_dns 'dns' && sleep 1) 
   local sername
   [[ $perm = true ]] && sername="${backend}-tuner-perm@${user}" || sername="${backend}-tuner@${user}"
-  mkdir -p /usr/lib/clash-tuner && echo "conf=$conf" > /usr/lib/clash-tuner/env || return 1
+  mkdir -p /usr/lib/clash-tuner
+  echo "conf=$conf" > /usr/lib/clash-tuner/env || return 1
   echo "[Conf] Clash working path has been set to: $conf (edited: /usr/lib/clash-tuner/env)"
   # runuser -u "$user" -- systemctl --user start "$sername"
   # runuser -u "$user" -- systemctl --user show -p MainPID --value "$sername" > "$pidpath"
