@@ -11,6 +11,13 @@ Type=exec
 # [perm] bool, eg. true (default is false), enable addition permission for the user using clash (eg. modify iptables, or bind limited ports)
 # [backend], eg. clash, the default is `clash-meta`
 # leave anything empty to use the default value
+
+
+## A simple loop to ensure network online and net interface can be found by clash (required by the utun device)
+# ExecStartPre=/bin/sh -c 'until ping -c1 223.5.5.5; do sleep 1; done;'
+## It's useful if you want to edit the service by `systemctl edit clash-tuner.service`
+## A empty `ExecStart` before any `ExecStart` to remove the exist default ExecStart
+# ExecStart=
 ExecStart=bash -c '/usr/bin/clash-tuner limc iqzone true clash-meta'
 
 [Install]

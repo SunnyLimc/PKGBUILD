@@ -38,7 +38,7 @@ _start() {
   ping -c1 -W2 cdn.jsdelivr.net > /dev/null || (echo "[WARN] Try to fix network error" && _refresh_dns 'dns' && sleep 1) 
   local sername
   [[ $perm = true ]] && sername="${backend}-tuner-perm@${user}" || sername="${backend}-tuner@${user}"
-  echo "conf=$conf" > /usr/lib/clash-tuner/env 
+  mkdir -p /usr/lib/clash-tuner && echo "conf=$conf" > /usr/lib/clash-tuner/env || return 1
   echo "[Conf] Clash working path has been set to: $conf (edited: /usr/lib/clash-tuner/env)"
   # runuser -u "$user" -- systemctl --user start "$sername"
   # runuser -u "$user" -- systemctl --user show -p MainPID --value "$sername" > "$pidpath"

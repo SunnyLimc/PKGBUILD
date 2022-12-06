@@ -7,3 +7,4 @@ srcpkg
 !**/*.patch
 !**/*.sh
 !**/*.service
+!**/*.xml
