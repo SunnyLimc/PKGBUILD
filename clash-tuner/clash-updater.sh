@@ -45,7 +45,6 @@ iqzone_meta_tun_tun=true
 _ERROR() {
   echo "[ERR] Detected"
   [[ -f ${tmp}/wconf ]] && echo "[LOG ECHO] last 15 lines of downloaded config" && cat ${tmp}/wconf | tail -n15
-  [[ -f ${tmp}/wlog ]] && echo "[LOG ECHO] wget log" && cat ${tmp}/wlog
   echo ERROR: Script aborted
 }
 
@@ -56,14 +55,14 @@ echo "[CONF] Loading config from $confpath"
 
 if [[ $1 != '--bypass-dat' ]]; then
   echo Downloading: Counrties-based GeoIP.dat
-  if wget -O "$tmp"/dat -o ${tmp}/wlog "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip.dat"; then
+  if wget -O "$tmp"/dat "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/geoip.dat" -q --show-progress; then
     cp "$tmp"/dat "$path"/GeoIP.dat
     echo Downloaded: "$path"/GeoIP.dat
   else
     exit 1
   fi
   echo Downloading: Counrties-based Country.mmdb
-  if wget -O "$tmp"/dat -o ${tmp}/wlog "https://cdn.jsdelivr.net/gh/Dreamacro/maxmind-geoip@release/Country.mmdb"; then
+  if wget -O "$tmp"/dat "https://cdn.jsdelivr.net/gh/Dreamacro/maxmind-geoip@release/Country.mmdb" -q --show-progress; then
     cp "$tmp"/dat "$path"/Country.mmdb
     echo Downloaded: "$path"/Country.mmdb
   else
@@ -83,7 +82,7 @@ for i in "${profiles[@]}"; do
     exp_url="${exp_url}&${j}=${val}"
   done
   echo Downloading: ${i//%/_} FROM ${exp_url}
-  if mkdir -p "$path"/${i//%/_} && wget -O "${tmp}/wconf" -o "${tmp}/wlog" "$exp_url" && [[ $(wc -l < ${tmp}/wconf) -ge 5 ]]; then
+  if mkdir -p "$path"/${i//%/_} && wget -O "${tmp}/wconf" "$exp_url" -q --show-progress && [[ $(wc -l < ${tmp}/wconf) -ge 5 ]]; then
      cp ${tmp}/wconf "$path"/"${i//%/_}"/config.yaml
      [[ ${i//%/_} = $default ]] && cp "$path"/"${i//%/_}"/config.yaml "$path"/config.yaml
      if [[ $1 != '--bypass-dat' ]]; then
